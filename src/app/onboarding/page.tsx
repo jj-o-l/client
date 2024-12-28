@@ -4,9 +4,11 @@ import React from "react";
 import logo from "@/ui/src/assets/logo.png";
 import Image from "next/image";
 import Button from "@/components/Button";
+import { useRouter } from "next/navigation";
 import * as s from "./style.css";
 
 function Onboarding() {
+  const router = useRouter();
   return (
     <div className={s.container}>
       <p className={s.title}>
@@ -17,7 +19,7 @@ function Onboarding() {
       <Button
         title="시작하기"
         onClickMethod={() => {
-          return 0;
+          router.push("/register/signup");
         }}
         disabled={false}
       />
