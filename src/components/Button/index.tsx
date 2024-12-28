@@ -14,7 +14,7 @@ function Button({ title, onClickMethod, disabled }: ButtonProps) {
       tabIndex={0}
       className={s.container}
       onClick={onClickMethod}
-      disabled={!disabled}
+      disabled={disabled}
       style={{ background: disabled ? "#BCBCBC" : "#FF6F61" }}
     >
       {title}
