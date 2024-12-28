@@ -1,11 +1,11 @@
 "use client";
 
 import Home from "@/ui/src/icons/Home";
-import * as s from "./style.css";
 import { useRouter } from "next/navigation";
 import Ranking from "@/ui/src/icons/Ranking";
 import Community from "@/ui/src/icons/Community";
 import Profile from "@/ui/src/icons/Profile";
+import * as s from "./style.css";
 
 interface MenuBarProps {
   selectState: number;
@@ -18,7 +18,7 @@ const icons = [
   { icon: Profile, title: "프로필", location: "/profile" },
 ];
 
-const MenuBar = ({ selectState }: MenuBarProps) => {
+function MenuBar({ selectState }: MenuBarProps) {
   const router = useRouter();
 
   return (
@@ -26,10 +26,14 @@ const MenuBar = ({ selectState }: MenuBarProps) => {
       {icons.map((item, index) => {
         const IconComponent = item.icon;
         return (
-          <div
-            key={index}
+          <button
+            type="button"
+            key={item.title}
             className={s.icon}
             onClick={() => {
+              router.push(item.location);
+            }}
+            onKeyDown={() => {
               router.push(item.location);
             }}
           >
@@ -41,11 +45,11 @@ const MenuBar = ({ selectState }: MenuBarProps) => {
             >
               {item.title}
             </div>
-          </div>
+          </button>
         );
       })}
     </div>
   );
-};
+}
 
 export default MenuBar;

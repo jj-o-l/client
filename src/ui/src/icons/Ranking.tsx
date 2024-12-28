@@ -1,6 +1,6 @@
 import React from "react";
 
-const Ranking = ({ fill }: { fill: string }) => {
+function Ranking({ fill }: { fill: string }) {
   return (
     <svg
       width="28"
@@ -15,6 +15,6 @@ const Ranking = ({ fill }: { fill: string }) => {
       />
     </svg>
   );
-};
+}
 
 export default Ranking;

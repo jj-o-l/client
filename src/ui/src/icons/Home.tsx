@@ -1,6 +1,6 @@
 import React from "react";
 
-const Home = ({ fill }: { fill: string }) => {
+function Home({ fill }: { fill: string }) {
   return (
     <svg
       width="28"
@@ -15,6 +15,6 @@ const Home = ({ fill }: { fill: string }) => {
       />
     </svg>
   );
-};
+}
 
 export default Home;

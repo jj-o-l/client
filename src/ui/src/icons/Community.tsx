@@ -1,6 +1,6 @@
 import React from "react";
 
-const Community = ({ fill }: { fill: string }) => {
+function Community({ fill }: { fill: string }) {
   return (
     <svg
       width="28"
@@ -15,6 +15,6 @@ const Community = ({ fill }: { fill: string }) => {
       />
     </svg>
   );
-};
+}
 
 export default Community;

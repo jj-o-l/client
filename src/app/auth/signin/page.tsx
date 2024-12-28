@@ -49,14 +49,21 @@ function Signin() {
             value={inputValues.password}
             onChange={handleChange}
           />
-          <p
+          <div
             className={s.noAccount}
+            role="button"
+            tabIndex={0}
             onClick={() => {
               router.push("/auth/signup");
             }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                router.push("/auth/signup");
+              }
+            }}
           >
             계정이 없으신가요?
-          </p>
+          </div>
         </div>
       </div>
       <Button

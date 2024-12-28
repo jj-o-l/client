@@ -7,6 +7,7 @@ export const container = style({
   flexDirection: "column",
   padding: "0 20px 100px",
   overflowY: "hidden",
+  position: "relative",
 });
 
 export const comment = style({
@@ -21,4 +22,14 @@ export const challenges = style({
   gap: "10px",
   marginTop: "20px",
   overflowY: "auto",
+});
+
+export const createButton = style({
+  display: "flex",
+  position: "fixed",
+  bottom: "110px",
+  padding: "10px",
+  background: "#FF6F61",
+  borderRadius: "100%",
+  right: "20px",
 });

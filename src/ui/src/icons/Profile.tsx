@@ -1,6 +1,6 @@
 import React from "react";
 
-const Profile = ({ fill }: { fill: string }) => {
+function Profile({ fill }: { fill: string }) {
   return (
     <svg
       width="28"
@@ -17,6 +17,6 @@ const Profile = ({ fill }: { fill: string }) => {
       />
     </svg>
   );
-};
+}
 
 export default Profile;

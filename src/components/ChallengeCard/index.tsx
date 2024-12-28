@@ -1,7 +1,7 @@
 import React from "react";
 import * as s from "./style.css";
 
-const ChallengeCard = () => {
+function ChallengeCard() {
   return (
     <div className={s.container}>
       <div className={s.top}>
@@ -17,6 +17,6 @@ const ChallengeCard = () => {
       </div>
     </div>
   );
-};
+}
 
 export default ChallengeCard;
