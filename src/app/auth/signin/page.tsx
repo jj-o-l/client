@@ -1,6 +1,6 @@
 "use client";
 
-import Header from "@/components/Header";
+import StackHeader from "@/components/StackHeader";
 import React, { useState, useEffect } from "react";
 import InputLayout from "@/components/InputLayout";
 import Button from "@/components/Button";
@@ -31,7 +31,7 @@ function Signin() {
 
   return (
     <div className={s.container}>
-      <Header title="로그인" />
+      <StackHeader title="로그인" />
       <div className={s.layout}>
         <p className={s.title}>다시 도전 해보세요</p>
         <div className={s.inputs}>

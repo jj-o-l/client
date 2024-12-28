@@ -1,6 +1,6 @@
 "use client";
 
-import Header from "@/components/Header";
+import StackHeader from "@/components/StackHeader";
 import React, { useState, useEffect } from "react";
 import InputLayout from "@/components/InputLayout";
 import Button from "@/components/Button";
@@ -34,7 +34,7 @@ function Signup() {
 
   return (
     <div className={s.container}>
-      <Header title="회원가입" />
+      <StackHeader title="회원가입" />
       <div className={s.layout}>
         <p className={s.title}>도전할 준비 되셨나요?</p>
         <div className={s.inputs}>
