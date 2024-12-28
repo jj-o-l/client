@@ -1,5 +1,5 @@
 {
-  "name": "repoo",
+  "name": "jjol",
   "type": "module",
   "version": "0.1.0",
   "private": true,
@@ -18,15 +18,10 @@
     ]
   },
   "dependencies": {
-    "@fullcalendar/core": "^6.1.15",
-    "@fullcalendar/daygrid": "^6.1.15",
-    "@fullcalendar/interaction": "^6.1.15",
-    "@fullcalendar/react": "^6.1.15",
     "@tanstack/react-query": "^4.36.1",
     "@tanstack/react-query-devtools": "^5.62.7",
     "@vanilla-extract/css": "^1.16.0",
     "@vanilla-extract/next-plugin": "^2.4.6",
-    "husky-init": "^8.0.0",
     "next": "15.0.3",
     "react": "^18.2.0",
     "react-daum-postcode": "^3.1.3",
@@ -49,7 +44,6 @@
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.0.0",
-    "husky": "^8.0.3",
     "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
     "typescript": "^5.3.3"
