@@ -60,7 +60,7 @@ function Signin() {
         </div>
       </div>
       <Button
-        title="회원가입"
+        title="로그인"
         onClickMethod={() => {
           router.push("/auth/login");
         }}
