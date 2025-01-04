@@ -3,7 +3,6 @@
 import Home from "@/ui/src/icons/Home";
 import { useRouter } from "next/navigation";
 import Ranking from "@/ui/src/icons/Ranking";
-import Community from "@/ui/src/icons/Community";
 import Profile from "@/ui/src/icons/Profile";
 import * as s from "./style.css";
 
@@ -14,7 +13,6 @@ interface MenuBarProps {
 const icons = [
   { icon: Home, title: "홈", location: "/" },
   { icon: Ranking, title: "랭킹", location: "/ranking" },
-  { icon: Community, title: "커뮤니티", location: "/community" },
   { icon: Profile, title: "프로필", location: "/profile" },
 ];
 
