@@ -5,29 +5,22 @@ import StackHeader from "@/components/StackHeader";
 import InputLayout from "@/components/InputLayout";
 import Button from "@/components/Button";
 import * as s from "./style.css";
-
-interface FormData {
-  title: string;
-  description: string;
-  category: string;
-  rules: { id: string; value: string }[];
-  deadlineDate: string;
-  deadlineTime: string;
-  difficulty: number;
-  successCount: string;
-  reward: string;
-}
+import { IChallenge } from "@/types/IChallenge";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 function Create() {
-  const [formData, setFormData] = useState<FormData>({
+  const router = useRouter();
+  const [formData, setFormData] = useState<IChallenge>({
+    id: 0,
+    userId: 0,
     title: "",
     description: "",
-    category: "",
+    categories: [],
     rules: [],
-    deadlineDate: "",
-    deadlineTime: "",
-    difficulty: 0,
-    successCount: "",
+    deadline: "",
+    level: 0,
+    maxParticipants: 0,
     reward: "",
   });
 
@@ -44,22 +37,21 @@ function Create() {
   const addRule = () => {
     setFormData((prev) => ({
       ...prev,
-      rules: [...prev.rules, { id: `${Date.now()}`, value: "" }],
+      rules: [...prev.rules, ""],
     }));
   };
 
-  const updateRule = (id: string, value: string) => {
-    const updatedRules = formData.rules.map((rule) =>
-      rule.id === id ? { ...rule, value } : rule,
-    );
+  const updateRule = (index: number, value: string) => {
+    const updatedRules = [...formData.rules];
+    updatedRules[index] = value;
     setFormData((prev) => ({
       ...prev,
       rules: updatedRules,
     }));
   };
 
-  const removeRule = (id: string) => {
-    const updatedRules = formData.rules.filter((rule) => rule.id !== id);
+  const removeRule = (index: number) => {
+    const updatedRules = formData.rules.filter((_, i) => i !== index);
     setFormData((prev) => ({
       ...prev,
       rules: updatedRules,
@@ -69,16 +61,61 @@ function Create() {
   const setCategory = (category: string) => {
     setFormData((prev) => ({
       ...prev,
-      category,
+      categories: prev.categories.includes(category)
+        ? prev.categories.filter((c) => c !== category)
+        : [...prev.categories, category],
     }));
   };
 
   const setDifficulty = (level: number) => {
     setFormData((prev) => ({
       ...prev,
-      difficulty: level,
+      level,
     }));
   };
+
+  const handleDeadlineChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: "date" | "time",
+  ) => {
+    const { value } = e.target;
+    setFormData((prev) => {
+      const [currentDate, currentTime] = prev.deadline.split("T");
+      return {
+        ...prev,
+        deadline:
+          type === "date"
+            ? `${value}T${currentTime || "00:00"}`
+            : `${currentDate || ""}T${value}`,
+      };
+    });
+  };
+
+  const handleSubmit = async () => {
+    const updatedData = { ...formData };
+    updatedData.maxParticipants = parseInt(
+      updatedData.maxParticipants.toString(),
+      10,
+    );
+    updatedData.deadline = updatedData.deadline.split("T")[0];
+    updatedData.rules = updatedData.rules.filter((rule) => rule.trim() !== "");
+
+    try {
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/mission/create`,
+        updatedData,
+      );
+      router.push("/");
+    } catch (error) {
+      console.error("서버 요청 오류", error);
+    }
+  };
+
+  const isFormValid =
+    formData.title &&
+    formData.categories.length &&
+    formData.level > 0 &&
+    formData.maxParticipants > 0;
 
   return (
     <div className={s.container}>
@@ -110,7 +147,9 @@ function Create() {
                   key={category}
                   type="button"
                   className={`${s.categoryButton} ${
-                    formData.category === category ? s.selected : s.unselected
+                    formData.categories.includes(category)
+                      ? s.selected
+                      : s.unselected
                   }`}
                   onClick={() => setCategory(category)}
                 >
@@ -122,19 +161,19 @@ function Create() {
         </div>
         <div className={s.ruleContainer}>
           <p className={s.title}>규칙</p>
-          {formData.rules.map((rule) => (
-            <div key={rule.id} className={s.rule}>
+          {formData.rules.map((rule, index) => (
+            <div key={index} className={s.rule}>
               <input
                 type="text"
                 className={s.inputBox}
-                value={rule.value}
+                value={rule}
                 placeholder="규칙"
-                onChange={(e) => updateRule(rule.id, e.target.value)}
+                onChange={(e) => updateRule(index, e.target.value)}
               />
               <button
                 type="button"
                 className={s.removeButton}
-                onClick={() => removeRule(rule.id)}
+                onClick={() => removeRule(index)}
               >
                 ✕
               </button>
@@ -150,16 +189,12 @@ function Create() {
             <input
               className={s.inputBox}
               type="date"
-              name="deadlineDate"
-              value={formData.deadlineDate}
-              onChange={handleInputChange}
+              onChange={(e) => handleDeadlineChange(e, "date")}
             />
             <input
               className={s.inputBox}
               type="time"
-              name="deadlineTime"
-              value={formData.deadlineTime}
-              onChange={handleInputChange}
+              onChange={(e) => handleDeadlineChange(e, "time")}
             />
           </div>
         </div>
@@ -171,22 +206,20 @@ function Create() {
                 key={level}
                 type="button"
                 className={
-                  level <= formData.difficulty
-                    ? s.starSelected
-                    : s.starUnselected
+                  level <= formData.level ? s.starSelected : s.starUnselected
                 }
                 onClick={() => setDifficulty(level)}
               >
-                {level <= formData.difficulty ? "★" : "☆"}
+                {level <= formData.level ? "★" : "☆"}
               </button>
             ))}
           </div>
         </div>
         <InputLayout
-          title="성공 인원"
-          placeholder="성공 인원 수를 입력해주세요"
-          name="successCount"
-          value={formData.successCount}
+          title="최대 참가 인원"
+          placeholder="최대 참가 인원을 입력해주세요"
+          name="maxParticipants"
+          value={formData.maxParticipants.toString()}
           onChange={handleInputChange}
         />
         <InputLayout
@@ -199,12 +232,8 @@ function Create() {
       </div>
       <Button
         title="도전 생성"
-        onClickMethod={() => {
-          return 0;
-        }}
-        disabled={
-          !formData.title || !formData.category || formData.difficulty === 0
-        }
+        onClickMethod={handleSubmit}
+        disabled={!isFormValid}
       />
     </div>
   );

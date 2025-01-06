@@ -6,6 +6,7 @@ import InputLayout from "@/components/InputLayout";
 import Button from "@/components/Button";
 import { useRouter } from "next/navigation";
 import * as s from "./style.css";
+import axios from "axios";
 
 function Signup() {
   const router = useRouter();
@@ -23,6 +24,20 @@ function Signup() {
       ...prevValues,
       [name]: value,
     }));
+  };
+
+  const handleSubmit = () => {
+    try {
+      axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/member`, {
+        userId: inputValues.id,
+        username: inputValues.name,
+        password: inputValues.password,
+      });
+      alert("회원가입 성공!");
+      router.push("/auth/signin");
+    } catch {
+      alert("회원가입 실패");
+    }
   };
 
   useEffect(() => {
@@ -58,6 +73,7 @@ function Signup() {
             name="password"
             value={inputValues.password}
             onChange={handleChange}
+            type="password"
           />
           <InputLayout
             title="비밀번호 확인"
@@ -65,14 +81,13 @@ function Signup() {
             name="passwordCheck"
             value={inputValues.passwordCheck}
             onChange={handleChange}
+            type="password"
           />
         </div>
       </div>
       <Button
         title="회원가입"
-        onClickMethod={() => {
-          router.push("/auth/login");
-        }}
+        onClickMethod={handleSubmit}
         disabled={isDisabled}
       />
     </div>

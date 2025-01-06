@@ -19,7 +19,7 @@ function Onboarding() {
       <Button
         title="시작하기"
         onClickMethod={() => {
-          router.push("/register/signin");
+          router.push("/auth/signin");
         }}
         disabled={false}
       />

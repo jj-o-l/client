@@ -6,6 +6,7 @@ import InputLayout from "@/components/InputLayout";
 import Button from "@/components/Button";
 import { useRouter } from "next/navigation";
 import * as s from "./style.css";
+import axios from "axios";
 
 function Signin() {
   const router = useRouter();
@@ -29,6 +30,19 @@ function Signin() {
     setIsDisabled(!isFormValid);
   }, [inputValues]);
 
+  const handleSubmit = () => {
+    try {
+      axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/login`, {
+        userId: inputValues.id,
+        password: inputValues.password,
+      });
+      alert("로그인 성공!");
+      router.push("/");
+    } catch {
+      alert("로그인 실패");
+    }
+  };
+
   return (
     <div className={s.container}>
       <StackHeader title="로그인" />
@@ -48,6 +62,7 @@ function Signin() {
             name="password"
             value={inputValues.password}
             onChange={handleChange}
+            type="password"
           />
           <div
             className={s.noAccount}
@@ -68,9 +83,7 @@ function Signin() {
       </div>
       <Button
         title="로그인"
-        onClickMethod={() => {
-          router.push("/auth/login");
-        }}
+        onClickMethod={handleSubmit}
         disabled={isDisabled}
       />
     </div>
