@@ -7,8 +7,12 @@ import ChallengeCard from "@/components/ChallengeCard";
 import { useRouter } from "next/navigation";
 import Plus from "@/ui/src/icons/Plus";
 import * as s from "./style.css";
+import axios from "axios";
 
 function Home() {
+  const data = axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/missions`);
+  console.log(data);
+
   const router = useRouter();
   return (
     <div className={s.container}>
