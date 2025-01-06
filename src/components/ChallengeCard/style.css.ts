@@ -23,6 +23,11 @@ export const title = style({
   fontWeight: "bold",
 });
 
+export const categories = style({
+  display: "flex",
+  gap: "4px",
+});
+
 export const category = style({
   fontSize: "14px",
   color: "#666",
