@@ -18,6 +18,11 @@ export const title = style({
   fontWeight: "bold",
 });
 
+export const categories = style({
+  display: "flex",
+  gap: "4px",
+});
+
 export const greyText = style({
   fontSize: "12px",
   color: "#888888",
