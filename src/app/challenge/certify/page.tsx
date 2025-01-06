@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import * as s from "./style.css";
 import StackHeader from "@/components/StackHeader";
 import InputLayout from "@/components/InputLayout";
 import axios from "axios";
 import Button from "@/components/Button";
+import * as s from "./style.css";
 // import Upload from "@/ui/src/icons/Upload";
 
-const Certify = () => {
+function Certify() {
   const [formData, setFormData] = useState({
     userId: 1,
     missionId: 101,
@@ -58,7 +58,6 @@ const Certify = () => {
       });
     } catch {
       alert("인증 실패");
-      return;
     }
   };
 
@@ -110,6 +109,6 @@ const Certify = () => {
       />
     </>
   );
-};
+}
 
 export default Certify;

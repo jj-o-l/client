@@ -6,10 +6,10 @@ import MenuBar from "@/components/MenuBar";
 import ChallengeCard from "@/components/ChallengeCard";
 import { useRouter } from "next/navigation";
 import Plus from "@/ui/src/icons/Plus";
-import * as s from "./style.css";
 import axios from "axios";
 import { IChallenge } from "@/types/IChallenge";
 import Link from "next/link";
+import * as s from "./style.css";
 
 function Home() {
   const [challenges, setChallenges] = useState<IChallenge[]>([]);
@@ -23,7 +23,7 @@ function Home() {
         );
         setChallenges(response.data);
       } catch (error) {
-        console.error("데이터 가져오기 실패:", error);
+        alert("데이터 가져오기 실패");
       }
     };
 

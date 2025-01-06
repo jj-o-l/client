@@ -2,18 +2,18 @@
 
 import React, { useEffect, useState } from "react";
 import StackHeader from "@/components/StackHeader";
-import * as s from "./style.css";
 import Star from "@/ui/src/icons/Star";
 import Certification from "@/components/Certification";
 import { IChallenge } from "@/types/IChallenge";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import { ICertification } from "@/types/ICertification";
+import * as s from "./style.css";
 
 function Detail() {
   const router = useRouter();
   const params = useParams();
-  const id = params.id;
+  const { id } = params;
 
   const [challenge, setChallenge] = useState<IChallenge>();
   const [certifications, setCertifications] = useState<ICertification[]>();
@@ -26,7 +26,7 @@ function Detail() {
         );
         setChallenge(response.data);
       } catch (error) {
-        console.error("데이터 가져오기 실패:", error);
+        alert("데이터 가져오기 실패");
       }
     };
 
@@ -37,13 +37,13 @@ function Detail() {
         );
         setCertifications(response.data);
       } catch (error) {
-        console.error("데이터 가져오기 실패:", error);
+        alert("데이터 가져오기 실패");
       }
     };
 
     fetchChallenges();
     fetchCertifications();
-  }, []);
+  }, [id]);
 
   return (
     <>
@@ -66,8 +66,12 @@ function Detail() {
         <div className={s.hr} />
         <div className={s.explainBox}>
           <button
+            type="button"
             className={s.challengeButton}
             onClick={() => {
+              router.push("/challenge/certify");
+            }}
+            onKeyDown={() => {
               router.push("/challenge/certify");
             }}
           >

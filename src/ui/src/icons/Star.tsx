@@ -1,6 +1,6 @@
 import React from "react";
 
-const Star = ({ color }: { color: string }) => {
+function Star({ color }: { color: string }) {
   return (
     <svg
       width="18"
@@ -18,6 +18,6 @@ const Star = ({ color }: { color: string }) => {
       />
     </svg>
   );
-};
+}
 
 export default Star;

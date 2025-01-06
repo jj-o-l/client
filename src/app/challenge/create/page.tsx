@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import StackHeader from "@/components/StackHeader";
 import InputLayout from "@/components/InputLayout";
 import Button from "@/components/Button";
-import * as s from "./style.css";
 import { IChallenge } from "@/types/IChallenge";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import * as s from "./style.css";
 
 function Create() {
   const router = useRouter();
@@ -97,7 +97,8 @@ function Create() {
       updatedData.maxParticipants.toString(),
       10,
     );
-    updatedData.deadline = updatedData.deadline.split("T")[0];
+    const [date] = updatedData.deadline.split("T");
+    updatedData.deadline = date;
     updatedData.rules = updatedData.rules.filter((rule) => rule.trim() !== "");
 
     try {
@@ -107,7 +108,7 @@ function Create() {
       );
       router.push("/");
     } catch (error) {
-      console.error("서버 요청 오류", error);
+      alert("서버 요청 오류");
     }
   };
 
@@ -162,7 +163,7 @@ function Create() {
         <div className={s.ruleContainer}>
           <p className={s.title}>규칙</p>
           {formData.rules.map((rule, index) => (
-            <div key={index} className={s.rule}>
+            <div key={rule} className={s.rule}>
               <input
                 type="text"
                 className={s.inputBox}

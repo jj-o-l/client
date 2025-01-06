@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import * as s from "./style.css";
 import axios from "axios";
+import * as s from "./style.css";
 
 interface CertificationProps {
   id: number;
@@ -29,7 +29,6 @@ function Certification({
         });
       } catch {
         alert("투표 실패");
-        return;
       }
     }
   };
@@ -51,15 +50,21 @@ function Certification({
       </div>
       <div className={s.votes}>
         <div
+          tabIndex={0}
+          role="button"
           className={`${s.voteSuccess} ${vote === true ? s.selected : ""}`}
           onClick={() => handleVote(true)}
+          onKeyDown={() => handleVote(true)}
         >
           <p className={s.voteLabel}>성공</p>
           <p className={s.voteCount}>{success}표</p>
         </div>
         <div
+          tabIndex={0}
+          role="button"
           className={`${s.voteFailure} ${vote === false ? s.selected : ""}`}
           onClick={() => handleVote(false)}
+          onKeyDown={() => handleVote(false)}
         >
           <p className={s.voteLabel}>실패</p>
           <p className={s.voteCount}>{failed}표</p>

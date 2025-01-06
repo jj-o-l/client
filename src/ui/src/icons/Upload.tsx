@@ -1,6 +1,6 @@
 import React from "react";
 
-const Upload = () => {
+function Upload() {
   return (
     <svg
       width="18"
@@ -18,6 +18,6 @@ const Upload = () => {
       />
     </svg>
   );
-};
+}
 
 export default Upload;
