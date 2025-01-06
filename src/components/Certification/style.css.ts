@@ -64,11 +64,21 @@ export const votes = style({
 export const voteSuccess = style({
   textAlign: "center",
   color: "#28a745",
+  cursor: "pointer",
 });
 
 export const voteFailure = style({
   textAlign: "center",
   color: "#dc3545",
+  cursor: "pointer",
+});
+
+// 선택된 상태에 적용될 스타일
+export const selected = style({
+  backgroundColor: "#007bff", // 선택된 항목의 배경색
+  color: "white", // 선택된 항목의 글자색
+  borderRadius: "4px", // 선택된 항목에 라운딩 처리
+  padding: "5px 10px", // 여백 추가
 });
 
 export const voteLabel = style({

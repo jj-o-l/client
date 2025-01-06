@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import * as s from "./style.css";
+import axios from "axios";
 
 interface CertificationProps {
+  id: number;
   title: string;
   checkboxes: string[];
   success: number;
@@ -9,11 +11,29 @@ interface CertificationProps {
 }
 
 function Certification({
+  id,
   title,
   checkboxes,
   success,
   failed,
 }: CertificationProps) {
+  const [vote, setVote] = useState<boolean | null>(null);
+
+  const handleVote = (voteValue: boolean) => {
+    if (vote === null) {
+      setVote(voteValue);
+      try {
+        axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/vote`, {
+          id,
+          vote: voteValue,
+        });
+      } catch {
+        alert("투표 실패");
+        return;
+      }
+    }
+  };
+
   return (
     <div className={s.container}>
       <h1 className={s.title}>{title}</h1>
@@ -30,11 +50,17 @@ function Certification({
         ))}
       </div>
       <div className={s.votes}>
-        <div className={s.voteSuccess}>
+        <div
+          className={`${s.voteSuccess} ${vote === true ? s.selected : ""}`}
+          onClick={() => handleVote(true)}
+        >
           <p className={s.voteLabel}>성공</p>
           <p className={s.voteCount}>{success}표</p>
         </div>
-        <div className={s.voteFailure}>
+        <div
+          className={`${s.voteFailure} ${vote === false ? s.selected : ""}`}
+          onClick={() => handleVote(false)}
+        >
           <p className={s.voteLabel}>실패</p>
           <p className={s.voteCount}>{failed}표</p>
         </div>

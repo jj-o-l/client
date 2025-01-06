@@ -7,10 +7,11 @@ import Star from "@/ui/src/icons/Star";
 import Certification from "@/components/Certification";
 import { IChallenge } from "@/types/IChallenge";
 import axios from "axios";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { ICertification } from "@/types/ICertification";
 
 function Detail() {
+  const router = useRouter();
   const params = useParams();
   const id = params.id;
 
@@ -64,6 +65,14 @@ function Detail() {
         <p className={s.desc}>{challenge?.description}</p>
         <div className={s.hr} />
         <div className={s.explainBox}>
+          <button
+            className={s.challengeButton}
+            onClick={() => {
+              router.push("/challenge/certify");
+            }}
+          >
+            도전하기
+          </button>
           <div className={s.contentBox}>
             <p className={s.contentText}>규칙</p>
             <ul>
@@ -105,6 +114,7 @@ function Detail() {
             {certifications?.map((certification) => (
               <Certification
                 key={certification.id}
+                id={certification.id}
                 title={certification.title}
                 checkboxes={certification.checkboxes}
                 success={certification.success}

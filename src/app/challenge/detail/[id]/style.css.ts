@@ -45,10 +45,22 @@ export const hr = style({
 });
 
 export const explainBox = style({
+  position: "relative",
   display: "flex",
   flexDirection: "column",
   gap: "8px",
   marginTop: "12px",
+});
+
+export const challengeButton = style({
+  padding: "8px 12px",
+  position: "absolute",
+  background: "#FF6F61",
+  borderRadius: "4px",
+  color: "white",
+  fontSize: "16px",
+  top: "5px",
+  right: "20px",
 });
 
 export const contentItem = style({

@@ -4,13 +4,16 @@ import React, { useState } from "react";
 import * as s from "./style.css";
 import StackHeader from "@/components/StackHeader";
 import InputLayout from "@/components/InputLayout";
-import Upload from "@/ui/src/icons/Upload";
+import axios from "axios";
+import Button from "@/components/Button";
+// import Upload from "@/ui/src/icons/Upload";
 
 const Certify = () => {
   const [formData, setFormData] = useState({
+    userId: 1,
+    missionId: 101,
     title: "",
     rules: [] as { id: string; value: string }[],
-    files: [] as File[],
   });
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,6 +46,20 @@ const Certify = () => {
       ...prev,
       rules: updatedRules,
     }));
+  };
+
+  const handleSubmit = () => {
+    try {
+      axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/challenge/create`, {
+        userId: formData.userId,
+        missionId: formData.missionId,
+        title: formData.title,
+        checkboxes: formData.rules,
+      });
+    } catch {
+      alert("인증 실패");
+      return;
+    }
   };
 
   return (
@@ -81,14 +98,16 @@ const Certify = () => {
             규칙 추가
           </button>
         </div>
-        <div className={s.uploadButton}>
+        {/* <div className={s.uploadButton}>
           <Upload />
           파일 업로드
-        </div>
-        <div className={s.uploadedFiles}>
-          <img src="1" alt="1" />
-        </div>
+        </div> */}
       </div>
+      <Button
+        title="인증하기"
+        onClickMethod={handleSubmit}
+        disabled={!formData.title}
+      />
     </>
   );
 };
