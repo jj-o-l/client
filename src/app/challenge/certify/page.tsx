@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect, Suspense } from "react";
 import StackHeader from "@/components/StackHeader";
 import InputLayout from "@/components/InputLayout";

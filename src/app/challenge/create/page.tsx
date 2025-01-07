@@ -6,7 +6,7 @@ import InputLayout from "@/components/InputLayout";
 import Button from "@/components/Button";
 import { IChallenge } from "@/types/IChallenge";
 import { useRouter } from "next/navigation";
-import axios from "axios"; // axios 추가
+import axios from "axios";
 import * as s from "./style.css";
 
 function Create() {
