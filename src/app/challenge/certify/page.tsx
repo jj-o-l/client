@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import StackHeader from "@/components/StackHeader";
 import InputLayout from "@/components/InputLayout";
 import Button from "@/components/Button";
@@ -10,7 +10,7 @@ import * as s from "./style.css";
 function Certify() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const missionId = searchParams?.get("missionId");
+  const missionId = searchParams.get("missionId");
 
   const [formData, setFormData] = useState({
     userId: 1,
@@ -23,7 +23,7 @@ function Certify() {
     if (missionId) {
       setFormData((prev) => ({
         ...prev,
-        missionId: Number(missionId),
+        missionId: Number(missionId), // 'missionId' 값이 변경될 때마다 상태를 갱신
       }));
     }
   }, [missionId]);
@@ -84,7 +84,7 @@ function Certify() {
   };
 
   return (
-    <Suspense fallback={<div>로딩...</div>}>
+    <div>
       <StackHeader title="인증글 작성" />
       <div className={s.container}>
         <InputLayout
@@ -125,7 +125,7 @@ function Certify() {
         onClickMethod={handleSubmit}
         disabled={!formData.title}
       />
-    </Suspense>
+    </div>
   );
 }
 
