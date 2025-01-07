@@ -15,10 +15,10 @@ function Profile() {
   const [userRank, setUserRank] = useState<number>(0);
   const [userHistory, setUserHistory] = useState<{
     success: number;
-    failure: number;
+    failed: number;
   }>({
     success: 0,
-    failure: 0,
+    failed: 0,
   });
 
   const router = useRouter();
@@ -26,22 +26,22 @@ function Profile() {
   const loadUserInfo = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/user/info`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/info`,
       );
       const { data } = response;
-      setUserName(data.userName || "ooo");
-      setUserRank(data.rank || 0);
-      setUserHistory(data.history || { success: 0, failure: 0 });
+      setUserName(data.username || "ooo");
+      setUserRank(data.score || 0);
+      setUserHistory(data.history || { success: 0, failed: 0 });
     } catch (error) {
       alert("서버에서 사용자 정보를 불러오는 중 오류가 발생했습니다");
       setUserName("ooo");
       setUserRank(0);
-      setUserHistory({ success: 0, failure: 0 });
+      setUserHistory({ success: 0, failed: 0 });
     }
   };
 
   const handleLogout = async () => {
-    await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/logout`);
+    await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/logout`);
     router.push("/onboarding");
   };
 
@@ -64,7 +64,7 @@ function Profile() {
           </div>
           <div className={s.historyBox}>
             <p className={s.failure}>실패</p>
-            <p className={s.countText}>{userHistory.failure}개</p>
+            <p className={s.countText}>{userHistory.failed}개</p>
           </div>
         </div>
       </div>
