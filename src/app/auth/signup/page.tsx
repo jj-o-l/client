@@ -31,17 +31,9 @@ function Signup() {
     const newUser = { username: name, userId: id, password };
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/member`,
-        newUser,
-      );
-
-      if (response.data.success) {
-        alert("회원가입 성공!");
-        router.push("/auth/signin");
-      } else {
-        alert(response.data.message || "회원가입 실패");
-      }
+      await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/member`, newUser);
+      alert("회원가입 성공!");
+      router.push("/auth/signin");
     } catch (error) {
       alert("회원가입 중 오류가 발생했습니다.");
     }

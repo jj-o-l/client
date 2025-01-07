@@ -34,7 +34,7 @@ function Signin() {
     const { id, password } = inputValues;
 
     try {
-      const response = await axios.post(
+      await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/login`,
         { userId: id, password },
         {
@@ -42,15 +42,7 @@ function Signin() {
         },
       );
 
-      if (response.data.success) {
-        alert("로그인 성공!");
-        router.push("/");
-      } else {
-        alert(
-          response.data.message ||
-            "로그인 실패: 아이디 또는 비밀번호를 확인해주세요.",
-        );
-      }
+      router.push("/");
     } catch (error) {
       alert("로그인 중 오류가 발생했습니다.");
     }
