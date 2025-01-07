@@ -1,4 +1,5 @@
 export interface IChallenge {
+  id?: number;
   userId: number;
   title: string;
   description: string;
