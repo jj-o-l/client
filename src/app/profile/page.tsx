@@ -41,7 +41,11 @@ function Profile() {
   };
 
   const handleLogout = async () => {
-    await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/logout`);
+    await axios.post(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/logout`,
+      {},
+      { withCredentials: true },
+    );
     router.push("/onboarding");
   };
 

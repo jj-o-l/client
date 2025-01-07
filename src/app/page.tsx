@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import DefaultHeader from "@/components/DefaultHeader";
 import MenuBar from "@/components/MenuBar";
 import ChallengeCard from "@/components/ChallengeCard";
@@ -15,29 +16,37 @@ function Home() {
   const [username, setUsername] = useState<string>("OOO");
   const router = useRouter();
 
-  const loadChallengesFromLocalStorage = () => {
-    const storedChallenges = localStorage.getItem("challenges");
-    if (storedChallenges) {
-      return JSON.parse(storedChallenges) as IChallenge[];
+  const fetchUserData = async () => {
+    try {
+      const { data } = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/info`,
+      );
+      setUsername(data.username || "ooo");
+    } catch (error) {
+      alert("Failed to fetch username");
     }
-    return [];
+  };
+
+  const fetchChallenges = async () => {
+    try {
+      const { data } = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/info`,
+      );
+      setChallenges(data.challenges || []);
+    } catch (error) {
+      alert("Failed to fetch challenges");
+    }
   };
 
   useEffect(() => {
-    const storedChallenges = loadChallengesFromLocalStorage();
-    setChallenges(storedChallenges);
-
-    const storedUsername = localStorage.getItem("username");
-    if (storedUsername) {
-      setUsername(storedUsername); // 로컬 스토리지에 저장된 사용자 이름이 있으면 설정
-    }
+    fetchUserData();
+    fetchChallenges();
   }, []);
 
   return (
     <div className={s.container}>
       <DefaultHeader title="홈" />
       <div className={s.comment}>{username}님, 오늘도 도전하세요!</div>{" "}
-      {/* 사용자 이름 표시 */}
       <div className={s.challenges}>
         {challenges.map((challenge) => (
           <Link key={challenge.id} href={`/challenge/detail/${challenge.id}`}>
