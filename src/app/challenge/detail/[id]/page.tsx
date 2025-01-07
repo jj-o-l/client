@@ -23,10 +23,9 @@ function Detail() {
   useEffect(() => {
     const fetchChallenge = async () => {
       try {
-        const response = await fetch(
+        const { data } = await axios.get(
           `${process.env.NEXT_PUBLIC_SERVER_URL}/mission/${id}`,
         );
-        const data = await response.json();
         setChallenge(data);
       } catch (error) {
         alert("실패");
