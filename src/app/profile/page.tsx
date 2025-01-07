@@ -27,6 +27,7 @@ function Profile() {
     try {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/info`,
+        { withCredentials: true },
       );
       const { data } = response;
       setUserName(data.username || "ooo");
