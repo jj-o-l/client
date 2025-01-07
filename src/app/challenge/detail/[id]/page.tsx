@@ -5,44 +5,48 @@ import StackHeader from "@/components/StackHeader";
 import Star from "@/ui/src/icons/Star";
 import Certification from "@/components/Certification";
 import { IChallenge } from "@/types/IChallenge";
-import axios from "axios";
-import { useParams, useRouter } from "next/navigation";
 import { ICertification } from "@/types/ICertification";
+import { useParams, useRouter } from "next/navigation";
 import * as s from "./style.css";
 
 function Detail() {
   const router = useRouter();
   const params = useParams();
-  const { id } = params;
+  const id = Number(params.id);
 
-  const [challenge, setChallenge] = useState<IChallenge>();
-  const [certifications, setCertifications] = useState<ICertification[]>();
+  const [challenge, setChallenge] = useState<IChallenge | null>(null);
+  const [certifications, setCertifications] = useState<ICertification[] | null>(
+    null,
+  );
+
+  const loadChallengesFromLocalStorage = () => {
+    const storedChallenges = localStorage.getItem("challenges");
+    if (storedChallenges) {
+      return JSON.parse(storedChallenges) as IChallenge[];
+    }
+    return [];
+  };
+
+  const loadCertificationsFromLocalStorage = () => {
+    const storedCertifications = localStorage.getItem("certifications");
+    if (storedCertifications) {
+      return JSON.parse(storedCertifications) as ICertification[];
+    }
+    return [];
+  };
 
   useEffect(() => {
-    const fetchChallenges = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/mission/${id}`,
-        );
-        setChallenge(response.data);
-      } catch (error) {
-        alert("데이터 가져오기 실패");
-      }
-    };
+    const storedChallenges = loadChallengesFromLocalStorage();
+    const currentChallenge = storedChallenges.find((ch) => ch.id === id);
+    if (currentChallenge) {
+      setChallenge(currentChallenge);
+    }
 
-    const fetchCertifications = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/challenges/${id}`,
-        );
-        setCertifications(response.data);
-      } catch (error) {
-        alert("데이터 가져오기 실패");
-      }
-    };
-
-    fetchChallenges();
-    fetchCertifications();
+    const certificationsData = loadCertificationsFromLocalStorage();
+    const filteredCertifications = certificationsData.filter(
+      (certification) => certification.missionId === id,
+    );
+    setCertifications(filteredCertifications);
   }, [id]);
 
   return (
@@ -69,10 +73,10 @@ function Detail() {
             type="button"
             className={s.challengeButton}
             onClick={() => {
-              router.push("/challenge/certify");
+              router.push(`/challenge/certify?missionId=${id}`);
             }}
             onKeyDown={() => {
-              router.push("/challenge/certify");
+              router.push(`/challenge/certify?missionId=${id}`);
             }}
           >
             도전하기
@@ -115,9 +119,9 @@ function Detail() {
           </div>
           <p className={s.certificationText}>인증글</p>
           <div className={s.certificationList}>
-            {certifications?.map((certification) => (
+            {certifications?.map((certification, index) => (
               <Certification
-                key={certification.id}
+                key={index}
                 id={certification.id}
                 title={certification.title}
                 checkboxes={certification.checkboxes}

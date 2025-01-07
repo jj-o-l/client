@@ -5,7 +5,6 @@ import React, { useState, useEffect } from "react";
 import InputLayout from "@/components/InputLayout";
 import Button from "@/components/Button";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import * as s from "./style.css";
 
 function Signup() {
@@ -27,16 +26,21 @@ function Signup() {
   };
 
   const handleSubmit = () => {
-    try {
-      axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/member`, {
-        userId: inputValues.id,
-        username: inputValues.name,
-        password: inputValues.password,
-      });
+    const { name, id, password } = inputValues;
+    const newUser = { username: name, userId: id, password };
+
+    const storedUsers = JSON.parse(localStorage.getItem("users") || "[]");
+    const userExists = storedUsers.some(
+      (user: { userId: string }) => user.userId === id,
+    );
+
+    if (userExists) {
+      alert("이미 존재하는 아이디입니다.");
+    } else {
+      storedUsers.push(newUser);
+      localStorage.setItem("users", JSON.stringify(storedUsers));
       alert("회원가입 성공!");
       router.push("/auth/signin");
-    } catch {
-      alert("회원가입 실패");
     }
   };
 

@@ -1,20 +1,32 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import StackHeader from "@/components/StackHeader";
 import InputLayout from "@/components/InputLayout";
-import axios from "axios";
 import Button from "@/components/Button";
+import { useSearchParams, useRouter } from "next/navigation";
 import * as s from "./style.css";
-// import Upload from "@/ui/src/icons/Upload";
 
 function Certify() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const missionId = searchParams?.get("missionId");
+
   const [formData, setFormData] = useState({
     userId: 1,
-    missionId: 101,
+    missionId: missionId ? Number(missionId) : null,
     title: "",
     rules: [] as { id: string; value: string }[],
   });
+
+  useEffect(() => {
+    if (missionId) {
+      setFormData((prev) => ({
+        ...prev,
+        missionId: Number(missionId),
+      }));
+    }
+  }, [missionId]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
@@ -49,15 +61,25 @@ function Certify() {
   };
 
   const handleSubmit = () => {
-    try {
-      axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/challenge/create`, {
+    if (missionId) {
+      const certificationData = {
         userId: formData.userId,
         missionId: formData.missionId,
         title: formData.title,
-        checkboxes: formData.rules,
-      });
-    } catch {
-      alert("인증 실패");
+        rules: formData.rules,
+      };
+
+      const storedCertifications = localStorage.getItem("certifications");
+      const certifications = storedCertifications
+        ? JSON.parse(storedCertifications)
+        : [];
+      certifications.push(certificationData);
+      localStorage.setItem("certifications", JSON.stringify(certifications));
+
+      alert("인증을 성공하였습니다.");
+      router.back();
+    } else {
+      alert("도전글이 선택되지 않았습니다.");
     }
   };
 
@@ -74,14 +96,14 @@ function Certify() {
         />
 
         <div className={s.ruleContainer}>
-          <p className={s.title}>규칙</p>
+          <p className={s.title}>체크리스트</p>
           {formData.rules.map((rule) => (
             <div key={rule.id} className={s.rule}>
               <input
                 type="text"
                 className={s.inputBox}
                 value={rule.value}
-                placeholder="규칙"
+                placeholder="체크리스트"
                 onChange={(e) => updateRule(rule.id, e.target.value)}
               />
               <button
@@ -94,13 +116,9 @@ function Certify() {
             </div>
           ))}
           <button type="button" className={s.addRuleButton} onClick={addRule}>
-            규칙 추가
+            체크리스트 추가
           </button>
         </div>
-        {/* <div className={s.uploadButton}>
-          <Upload />
-          파일 업로드
-        </div> */}
       </div>
       <Button
         title="인증하기"

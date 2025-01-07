@@ -5,7 +5,6 @@ import StackHeader from "@/components/StackHeader";
 import InputLayout from "@/components/InputLayout";
 import Button from "@/components/Button";
 import { IChallenge } from "@/types/IChallenge";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import * as s from "./style.css";
 
@@ -91,7 +90,7 @@ function Create() {
     });
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     const updatedData = { ...formData };
     updatedData.maxParticipants = parseInt(
       updatedData.maxParticipants.toString(),
@@ -102,13 +101,15 @@ function Create() {
     updatedData.rules = updatedData.rules.filter((rule) => rule.trim() !== "");
 
     try {
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/mission/create`,
-        updatedData,
+      const existingChallenges =
+        JSON.parse(localStorage.getItem("challenges") || "[]") || [];
+      localStorage.setItem(
+        "challenges",
+        JSON.stringify([...existingChallenges, updatedData]),
       );
       router.push("/");
     } catch (error) {
-      alert("서버 요청 오류");
+      alert("생성 오류");
     }
   };
 
@@ -163,7 +164,7 @@ function Create() {
         <div className={s.ruleContainer}>
           <p className={s.title}>규칙</p>
           {formData.rules.map((rule, index) => (
-            <div key={rule} className={s.rule}>
+            <div key={index} className={s.rule}>
               <input
                 type="text"
                 className={s.inputBox}
@@ -180,6 +181,7 @@ function Create() {
               </button>
             </div>
           ))}
+
           <button type="button" className={s.addRuleButton} onClick={addRule}>
             추가
           </button>

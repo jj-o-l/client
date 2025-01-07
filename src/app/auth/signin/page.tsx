@@ -5,7 +5,6 @@ import React, { useState, useEffect } from "react";
 import InputLayout from "@/components/InputLayout";
 import Button from "@/components/Button";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import * as s from "./style.css";
 
 function Signin() {
@@ -31,15 +30,18 @@ function Signin() {
   }, [inputValues]);
 
   const handleSubmit = () => {
-    try {
-      axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/login`, {
-        userId: inputValues.id,
-        password: inputValues.password,
-      });
+    const storedUsers = JSON.parse(localStorage.getItem("users") || "[]");
+    const user = storedUsers.find(
+      (u: { userId: string; password: string }) =>
+        u.userId === inputValues.id && u.password === inputValues.password,
+    );
+
+    if (user) {
       alert("로그인 성공!");
+      localStorage.setItem("loggedInUser", JSON.stringify(user));
       router.push("/");
-    } catch {
-      alert("로그인 실패");
+    } else {
+      alert("로그인 실패: 아이디 또는 비밀번호를 확인해주세요.");
     }
   };
 
@@ -68,9 +70,7 @@ function Signin() {
             className={s.noAccount}
             role="button"
             tabIndex={0}
-            onClick={() => {
-              router.push("/auth/signup");
-            }}
+            onClick={() => router.push("/auth/signup")}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
                 router.push("/auth/signup");

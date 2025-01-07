@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import * as s from "./style.css";
 
 interface CertificationProps {
@@ -13,33 +12,30 @@ interface CertificationProps {
 function Certification({
   id,
   title,
-  checkboxes,
+  checkboxes = [],
   success,
   failed,
 }: CertificationProps) {
   const [vote, setVote] = useState<boolean | null>(null);
 
+  useEffect(() => {
+    const savedVote = localStorage.getItem(`vote_${id}`);
+    if (savedVote) {
+      setVote(savedVote === "true");
+    }
+  }, [id]);
+
   const handleVote = (voteValue: boolean) => {
     if (vote === null) {
       setVote(voteValue);
-      try {
-        axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/vote`, {
-          id,
-          vote: voteValue,
-        });
-      } catch {
-        alert("투표 실패");
-      }
+      // 투표 상태를 로컬스토리지에 저장
+      localStorage.setItem(`vote_${id}`, voteValue.toString());
     }
   };
 
   return (
     <div className={s.container}>
       <h1 className={s.title}>{title}</h1>
-      {/* <p className={s.time}>1시간 전</p> */}
-      {/* <div className={s.content}>
-        <img className={s.imageBox} src="1" alt="인증 사진 or 동영상" />
-      </div> */}
       <div className={s.checkboxContainer}>
         {checkboxes.map((checkbox) => (
           <div key={checkbox} className={s.checkboxItem}>
@@ -70,7 +66,6 @@ function Certification({
           <p className={s.voteCount}>{failed}표</p>
         </div>
       </div>
-      {/* <p className={s.author}>추성우</p> */}
     </div>
   );
 }
