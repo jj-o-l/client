@@ -6,6 +6,7 @@ import InputLayout from "@/components/InputLayout";
 import Button from "@/components/Button";
 import { IChallenge } from "@/types/IChallenge";
 import { useRouter } from "next/navigation";
+import axios from "axios"; // axios 추가
 import * as s from "./style.css";
 
 function Create() {
@@ -90,7 +91,7 @@ function Create() {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const updatedData = { ...formData };
     updatedData.maxParticipants = parseInt(
       updatedData.maxParticipants.toString(),
@@ -101,15 +102,13 @@ function Create() {
     updatedData.rules = updatedData.rules.filter((rule) => rule.trim() !== "");
 
     try {
-      const existingChallenges =
-        JSON.parse(localStorage.getItem("challenges") || "[]") || [];
-      localStorage.setItem(
-        "challenges",
-        JSON.stringify([...existingChallenges, updatedData]),
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/mission/create`,
+        updatedData,
       );
       router.push("/");
     } catch (error) {
-      alert("생성 오류");
+      alert("도전 생성 오류");
     }
   };
 

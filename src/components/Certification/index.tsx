@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import * as s from "./style.css";
 
 interface CertificationProps {
@@ -25,11 +26,28 @@ function Certification({
     }
   }, [id]);
 
-  const handleVote = (voteValue: boolean) => {
+  const handleVote = async (voteValue: boolean) => {
     if (vote === null) {
       setVote(voteValue);
-      // 투표 상태를 로컬스토리지에 저장
       localStorage.setItem(`vote_${id}`, voteValue.toString());
+
+      try {
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/vote`,
+          {
+            id,
+            vote: voteValue,
+          },
+        );
+
+        if (response.status === 200) {
+          alert("투표 성공");
+        } else {
+          alert("서버에서 응답을 받지 못했습니다.");
+        }
+      } catch (error) {
+        alert("투표 요청 중 오류가 발생했습니다");
+      }
     }
   };
 

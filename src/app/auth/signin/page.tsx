@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import InputLayout from "@/components/InputLayout";
 import Button from "@/components/Button";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 import * as s from "./style.css";
 
 function Signin() {
@@ -29,19 +30,26 @@ function Signin() {
     setIsDisabled(!isFormValid);
   }, [inputValues]);
 
-  const handleSubmit = () => {
-    const storedUsers = JSON.parse(localStorage.getItem("users") || "[]");
-    const user = storedUsers.find(
-      (u: { userId: string; password: string }) =>
-        u.userId === inputValues.id && u.password === inputValues.password,
-    );
+  const handleSubmit = async () => {
+    const { id, password } = inputValues;
 
-    if (user) {
-      alert("로그인 성공!");
-      localStorage.setItem("loggedInUser", JSON.stringify(user));
-      router.push("/");
-    } else {
-      alert("로그인 실패: 아이디 또는 비밀번호를 확인해주세요.");
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/login`,
+        { userId: id, password },
+      );
+
+      if (response.data.success) {
+        alert("로그인 성공!");
+        router.push("/");
+      } else {
+        alert(
+          response.data.message ||
+            "로그인 실패: 아이디 또는 비밀번호를 확인해주세요.",
+        );
+      }
+    } catch (error) {
+      alert("로그인 중 오류가 발생했습니다.");
     }
   };
 

@@ -7,27 +7,46 @@ import Store from "@/ui/src/icons/Store";
 import Money from "@/ui/src/icons/Money";
 import MenuBar from "@/components/MenuBar";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 import * as s from "./style.css";
 
 function Profile() {
   const [userName, setUserName] = useState<string>("");
+  const [userRank, setUserRank] = useState<number>(0);
+  const [userHistory, setUserHistory] = useState<{
+    success: number;
+    failure: number;
+  }>({
+    success: 0,
+    failure: 0,
+  });
+
   const router = useRouter();
-  const loadUserNameFromLocalStorage = () => {
-    const storedUserName = localStorage.getItem("userName");
-    if (storedUserName) {
-      setUserName(storedUserName);
-    } else {
+
+  const loadUserInfo = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/user/info`,
+      );
+      const { data } = response;
+      setUserName(data.userName || "ooo");
+      setUserRank(data.rank || 0);
+      setUserHistory(data.history || { success: 0, failure: 0 });
+    } catch (error) {
+      alert("서버에서 사용자 정보를 불러오는 중 오류가 발생했습니다");
       setUserName("ooo");
+      setUserRank(0);
+      setUserHistory({ success: 0, failure: 0 });
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("userName");
+  const handleLogout = async () => {
+    await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/logout`);
     router.push("/onboarding");
   };
 
   useEffect(() => {
-    loadUserNameFromLocalStorage();
+    loadUserInfo();
   }, []);
 
   return (
@@ -36,16 +55,16 @@ function Profile() {
       <div className={s.myInfo}>
         <div className={s.left}>
           <p className={s.name}>{userName}님</p>
-          <p className={s.rank}>000점</p>
+          <p className={s.rank}>{userRank}점</p>
         </div>
         <div className={s.right}>
           <div className={s.historyBox}>
             <p className={s.success}>성공</p>
-            <p className={s.countText}>0개</p>
+            <p className={s.countText}>{userHistory.success}개</p>
           </div>
           <div className={s.historyBox}>
             <p className={s.failure}>실패</p>
-            <p className={s.countText}>0개</p>
+            <p className={s.countText}>{userHistory.failure}개</p>
           </div>
         </div>
       </div>

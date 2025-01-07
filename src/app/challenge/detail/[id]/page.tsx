@@ -7,6 +7,7 @@ import Certification from "@/components/Certification";
 import { IChallenge } from "@/types/IChallenge";
 import { ICertification } from "@/types/ICertification";
 import { useParams, useRouter } from "next/navigation";
+import axios from "axios";
 import * as s from "./style.css";
 
 function Detail() {
@@ -19,34 +20,32 @@ function Detail() {
     null,
   );
 
-  const loadChallengesFromLocalStorage = () => {
-    const storedChallenges = localStorage.getItem("challenges");
-    if (storedChallenges) {
-      return JSON.parse(storedChallenges) as IChallenge[];
-    }
-    return [];
-  };
-
-  const loadCertificationsFromLocalStorage = () => {
-    const storedCertifications = localStorage.getItem("certifications");
-    if (storedCertifications) {
-      return JSON.parse(storedCertifications) as ICertification[];
-    }
-    return [];
-  };
-
   useEffect(() => {
-    const storedChallenges = loadChallengesFromLocalStorage();
-    const currentChallenge = storedChallenges.find((ch) => ch.id === id);
-    if (currentChallenge) {
-      setChallenge(currentChallenge);
-    }
+    const fetchChallenge = async () => {
+      try {
+        const response = await fetch(`/api/challenges/${id}`);
+        const data = await response.json();
+        setChallenge(data);
+      } catch (error) {
+        alert("실패");
+      }
+    };
 
-    const certificationsData = loadCertificationsFromLocalStorage();
-    const filteredCertifications = certificationsData.filter(
-      (certification) => certification.missionId === id,
-    );
-    setCertifications(filteredCertifications);
+    const fetchCertifications = async () => {
+      try {
+        const { data } = await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/mission/${id}`,
+        );
+        setCertifications(data);
+      } catch (error) {
+        alert("실패");
+      }
+    };
+
+    if (id) {
+      fetchChallenge();
+      fetchCertifications();
+    }
   }, [id]);
 
   return (

@@ -1,10 +1,9 @@
-"use client";
-
 import React, { useState, useEffect, Suspense } from "react";
 import StackHeader from "@/components/StackHeader";
 import InputLayout from "@/components/InputLayout";
 import Button from "@/components/Button";
 import { useSearchParams, useRouter } from "next/navigation";
+import axios from "axios";
 import * as s from "./style.css";
 
 function CertifyPage() {
@@ -60,7 +59,7 @@ function CertifyPage() {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (missionId) {
       const certificationData = {
         userId: formData.userId,
@@ -69,15 +68,16 @@ function CertifyPage() {
         rules: formData.rules,
       };
 
-      const storedCertifications = localStorage.getItem("certifications");
-      const certifications = storedCertifications
-        ? JSON.parse(storedCertifications)
-        : [];
-      certifications.push(certificationData);
-      localStorage.setItem("certifications", JSON.stringify(certifications));
-
-      alert("인증을 성공하였습니다.");
-      router.back();
+      try {
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/challenge/create`,
+          certificationData,
+        );
+        alert("인증을 성공하였습니다.");
+        router.back();
+      } catch (error) {
+        alert("인증 요청에 실패하였습니다.");
+      }
     } else {
       alert("도전글이 선택되지 않았습니다.");
     }
