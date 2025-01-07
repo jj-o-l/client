@@ -7,10 +7,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <meta
-        name="viewport"
-        content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
-      />
+      <head>
+        <meta
+          name="viewport"
+          content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
