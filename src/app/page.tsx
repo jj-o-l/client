@@ -31,8 +31,7 @@ function Home() {
   const fetchChallenges = async () => {
     try {
       const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/info`,
-        { withCredentials: true },
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/missions`,
       );
       setChallenges(data.challenges || []);
     } catch (error) {
