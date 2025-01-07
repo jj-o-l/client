@@ -33,7 +33,7 @@ function Home() {
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/missions`,
       );
-      setChallenges(data.challenges || []);
+      setChallenges(data || []);
     } catch (error) {
       alert("Failed to fetch challenges");
     }
