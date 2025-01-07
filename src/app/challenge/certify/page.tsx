@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import StackHeader from "@/components/StackHeader";
 import InputLayout from "@/components/InputLayout";
 import Button from "@/components/Button";
 import { useSearchParams, useRouter } from "next/navigation";
 import * as s from "./style.css";
 
-function Certify() {
+function CertifyPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const missionId = searchParams.get("missionId");
@@ -23,7 +23,7 @@ function Certify() {
     if (missionId) {
       setFormData((prev) => ({
         ...prev,
-        missionId: Number(missionId), // 'missionId' 값이 변경될 때마다 상태를 갱신
+        missionId: Number(missionId),
       }));
     }
   }, [missionId]);
@@ -126,6 +126,14 @@ function Certify() {
         disabled={!formData.title}
       />
     </div>
+  );
+}
+
+function Certify() {
+  return (
+    <Suspense>
+      <CertifyPage />
+    </Suspense>
   );
 }
 
