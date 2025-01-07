@@ -20,6 +20,7 @@ function Home() {
     try {
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/info`,
+        { withCredentials: true },
       );
       setUsername(data.username || "ooo");
     } catch (error) {
