@@ -39,7 +39,7 @@ function Detail() {
         );
         setCertifications(Array.isArray(data) ? data : []);
       } catch (error) {
-        console.error('인증 목록 조회 실패:', error);
+        alert("인증 목록 조회 실패");
         setCertifications([]);
       }
     };
