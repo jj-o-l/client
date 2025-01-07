@@ -26,6 +26,7 @@ function Detail() {
         const { data } = await axios.get(
           `${process.env.NEXT_PUBLIC_SERVER_URL}/mission/${id}`,
         );
+        console.log(data);
         setChallenge(data);
       } catch (error) {
         alert("실패");
@@ -37,6 +38,7 @@ function Detail() {
         const { data } = await axios.get(
           `${process.env.NEXT_PUBLIC_SERVER_URL}/mission/${id}`,
         );
+        console.log(data);
         setCertifications(data);
       } catch (error) {
         alert("실패");
