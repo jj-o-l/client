@@ -24,7 +24,7 @@ function Detail() {
     const fetchChallenge = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/mission/detail/${id}`,
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/mission/${id}`,
         );
         const data = await response.json();
         setChallenge(data);
