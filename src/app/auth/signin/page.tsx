@@ -37,6 +37,9 @@ function Signin() {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/login`,
         { userId: id, password },
+        {
+          withCredentials: true,
+        },
       );
 
       if (response.data.success) {
