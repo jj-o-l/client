@@ -12,7 +12,6 @@ import * as s from "./style.css";
 function Create() {
   const router = useRouter();
   const [formData, setFormData] = useState<IChallenge>({
-    id: 0,
     userId: 0,
     title: "",
     description: "",

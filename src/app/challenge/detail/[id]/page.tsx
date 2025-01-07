@@ -26,7 +26,6 @@ function Detail() {
         const { data } = await axios.get(
           `${process.env.NEXT_PUBLIC_SERVER_URL}/mission/${id}`,
         );
-        console.log(data);
         setChallenge(data);
       } catch (error) {
         alert("실패");
@@ -36,12 +35,12 @@ function Detail() {
     const fetchCertifications = async () => {
       try {
         const { data } = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/mission/${id}`,
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/challenges/${id}`,
         );
-        console.log(data);
-        setCertifications(data);
+        setCertifications(Array.isArray(data) ? data : []);
       } catch (error) {
-        alert("실패");
+        console.error('인증 목록 조회 실패:', error);
+        setCertifications([]);
       }
     };
 
@@ -121,16 +120,20 @@ function Detail() {
           </div>
           <p className={s.certificationText}>인증글</p>
           <div className={s.certificationList}>
-            {certifications?.map((certification, index) => (
-              <Certification
-                key={index}
-                id={certification.id}
-                title={certification.title}
-                checkboxes={certification.checkboxes}
-                success={certification.success}
-                failed={certification.failed}
-              />
-            ))}
+            {certifications && certifications.length > 0 ? (
+              certifications.map((certification, index) => (
+                <Certification
+                  key={index}
+                  id={certification.id}
+                  title={certification.title}
+                  checkboxes={certification.checkboxes}
+                  success={certification.success}
+                  failed={certification.failed}
+                />
+              ))
+            ) : (
+              <p>인증글이 없습니다.</p>
+            )}
           </div>
         </div>
       </div>
