@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import StackHeader from "@/components/StackHeader";
 import InputLayout from "@/components/InputLayout";
 import Button from "@/components/Button";
@@ -84,7 +84,7 @@ function Certify() {
   };
 
   return (
-    <>
+    <Suspense fallback={<div>로딩...</div>}>
       <StackHeader title="인증글 작성" />
       <div className={s.container}>
         <InputLayout
@@ -125,7 +125,7 @@ function Certify() {
         onClickMethod={handleSubmit}
         disabled={!formData.title}
       />
-    </>
+    </Suspense>
   );
 }
 
